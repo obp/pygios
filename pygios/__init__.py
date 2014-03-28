@@ -131,7 +131,13 @@ def PygiosMain(args=sys.argv, work=None, name=None, stdout=sys.stdout, stderr=sy
         stdout.flush()
         return exit(3)
     
-
+def check(v):
+    if v > FLAGS.critial:
+        critial()
+    elif v > FLAGS.warning:
+        warning()
+    
+    
   
     
-__ALL__ = 'PygiosMain warning critical NagiosError error perf output more P'.split()
+__ALL__ = 'PygiosMain warning critical NagiosError error perf output more P check'.split()
