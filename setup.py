@@ -31,7 +31,7 @@ from setuptools import setup
 
 setup(
     name="pygios",
-    version="0.0.1",
+    version="0.0.2",
     author="Adam DePrince",
     author_email="deprince@googlealumni.com",
     description="Python based Nagios plugs made simple",
