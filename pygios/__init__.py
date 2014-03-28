@@ -96,6 +96,7 @@ def PygiosMain(args=sys.argv, work=None, name=None, stdout=sys.stdout, stderr=sy
 
     try:
         for line in work() or []:
+            if line is None: continue 
             if _verbosity > FLAGS.verbose:
                 break
             if isinstance(line, P):
@@ -134,11 +135,14 @@ def PygiosMain(args=sys.argv, work=None, name=None, stdout=sys.stdout, stderr=sy
         stdout.flush()
         return exit(3)
     
-def check(v):
+def check(v, msg):
     if v > FLAGS.critical:
         critical()
     elif v > FLAGS.warning:
         warning()
+    if msg is not None:
+        return msg % (v,)
+        
     
     
   

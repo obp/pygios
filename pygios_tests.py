@@ -8,6 +8,8 @@ class PygiosTestCase(unittest.TestCase):
     name = 'changeme'
     def setUp(self):
         reset()
+        self._name = FLAGS.name
+        FLAGS.name = self.name        
         self.exits = []
         self._stdout = StringIO()
         self.exitcode = PygiosMain(args=[self.name],
@@ -20,8 +22,8 @@ class PygiosTestCase(unittest.TestCase):
     def work(self):
         pass
 
-
     def tearDown(self):
+        FLAGS.name = self._name
         reset()
 
     def test_name_in_output(self):

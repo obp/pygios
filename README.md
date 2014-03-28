@@ -1,27 +1,83 @@
 pygios
 =========
 
-A crazy simple framework for creating compliant nagios plugins
+*A crazy simple python framework that lets you write a Nagios plug in 5
+minutes or your money back.*
 
-While the nagios monotoring framework really doesn't require mich more
-than the monitoring script return a 0/non-0 status code, to fully
-benefit from all of nagio's feautrues requires careful attention to
-output formatting and error codes.  If you have a bevy of custom
-parameters you'd like to monitor, creating a fully featured nagios
-plugin for each can be a little tedious.  This module solves that
-problem.
+Building a Nagios plugin should be simple.  Fast.  Easy.  And a some
+level it is, all Nagios requires is you return certain error codes,
+accept certain command line parameters and format your output in a
+certain way, taking care to seperate the two multiplexed streams of
+data with Nagios's simple protocol and simple special escaping rules.
 
+Yes, writing a Nagios is easy.  Its just a simple matter of
+programming that gets in the way when all you want is to monitor
+something and you have 5 minutes in which to do it.
 
-Getting started
-===============
+A 5 minute introduction to pygios
+=================================
 
-You'll need to install pygios.  Usually this means running pip or easy_install like ths
+To get started you'll need to install pagios.  {{pip install pygios}}
+usually works; if not try {{easy_install pygios}} or try running it as
+root as your environmetn might demand.
 
 ````bash
-pip install pygios 
+pip install pagios 
 ````
 
-Now
+We're going to start by writing a very simple and completely silly
+nagios alarm that monitors Python's random number generator.
+{{random.randint}} returns floating point numbers between 0 and 1; we
+want to receive a warning whenever it generates one larger than 0.5
+and a critical alarm when it generates one larger than 0.7.
+
+Now with your favorite editor open up a file called hello_pygios.py.
+We start by setting up the {{#!}} preamble and import statements.  We
+need a few things from pygios, and access to the command line
+arguements and random number generator from {{sys}} and {{random}}
+respectively.
+
+````python
+#!/usr/bin/env python
+# hello_pygios.py
+
+from pygios import check, default_warning, default_critial, PygiosMain
+from random import random
+from sys import	argv
+```` 
+
+Great!   Now continue by adding code to actually perform our test.
+
+```python
+def test():
+    yield check(random(), "Random value is %0.2f")                               
+````
+
+The {{check}} function accepts a value, tests it against the
+parameters provided on the command line, and sets the exit code
+accordingly.  It also optionally accepts a single message.
+
+Finally we call Pygios' main method to run the test.
+
+````python
+if __name__ == "__main__":
+    PygiosMain(argv, test, 'HELLOPYGIOS')
+````
+
+Now lets try the test on the command line 
+
+````bash
+$ python hello_world.py
+hello_world.py CRITICAL - Random value is 0.97
+$ python hello_world.py
+hello_world.py WARNING - Random value is 0.58
+$ python hello_world.py
+hello_world.py OK - Random value is 0.19
+````
+
+... and it works.  
+
+
 
 
 Advanced Tutorial
