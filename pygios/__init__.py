@@ -1,6 +1,8 @@
 import gflags
 import gflags_multibool
 import sys
+import os.path
+import os
 import traceback
 from StringIO import StringIO
 
@@ -8,7 +10,7 @@ FLAGS = gflags.FLAGS
 
 gflags_multibool.DEFINE_multibool('verbose', 0, 'Verbosity leve', short_name='v')
 
-gflags.DEFINE_string('name', None, 'Set the name of this daemon as presented to nagios.  This parameter is optional and can be used to overwrite the name parameter provided to pygios_main')
+gflags.DEFINE_string('name', sys.argv[0], 'Set the name of this daemon as presented to nagios.  This parameter is optional and can be used to overwrite the name parameter provided to pygios_main')
 
 def default_warning(v, help=None):
     if isinstance(v, (str, unicode)):
@@ -83,7 +85,6 @@ def more():
 
 def PygiosMain(args=sys.argv, work=None, name=None, stdout=sys.stdout, stderr=sys.stderr, exit=exit):
     _args = args
-    name = FLAGS.name or name or (args and args[0]) or sys.argv[0]
     global _code
     try:
         args = FLAGS(args)[1:]
@@ -91,6 +92,7 @@ def PygiosMain(args=sys.argv, work=None, name=None, stdout=sys.stdout, stderr=sy
         stderr.write("%s\nUsage: %s \n%s\n" % (
                 e, os.path.basename(_args[0]), FLAGS))
         return exit(3)
+    name = FLAGS.name or name or (args and args[0]) or sys.argv[0]
 
     try:
         for line in work() or []:
@@ -124,16 +126,17 @@ def PygiosMain(args=sys.argv, work=None, name=None, stdout=sys.stdout, stderr=sy
             stdout.write('\n'.join(_performance[1:]))
         stdout.flush()
         return exit(_code)
-    except Exception, e:
+    except Exception as e:
         exception_printout = StringIO()
-        traceback.print_exc(file=exception_printout)
-        stdout.write("%s UNKNOWN - %s" % (name, exception_printout.getvalue()))
+        if FLAGS.verbose:
+            traceback.print_exc(file=exception_printout)
+        stdout.write("%s UNKNOWN - %s" % (name, exception_printout.getvalue().replace('|', '\\|')))
         stdout.flush()
         return exit(3)
     
 def check(v):
-    if v > FLAGS.critial:
-        critial()
+    if v > FLAGS.critical:
+        critical()
     elif v > FLAGS.warning:
         warning()
     
