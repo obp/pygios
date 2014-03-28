@@ -20,10 +20,10 @@ Getting started
 You'll need to install pygios.  Usually this means running pip or easy_install like ths
 
 ````bash
-pip install pygios 
+pip install pygios
 ````
 
-Now 
+Now
 
 """
 

@@ -1,5 +1,5 @@
 from pygios import check, default_warning, default_critical, PygiosMain
-from random import random 
+from random import random
 from sys import argv
 
 default_warning(0.5)

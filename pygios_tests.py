@@ -9,7 +9,7 @@ class PygiosTestCase(unittest.TestCase):
     def setUp(self):
         reset()
         self._name = FLAGS.name
-        FLAGS.name = self.name        
+        FLAGS.name = self.name
         self.exits = []
         self._stdout = StringIO()
         self.exitcode = PygiosMain(args=[self.name],
@@ -46,7 +46,7 @@ class PygiosZeroVerbosity(PygiosTestCase):
         yield "three"
 
     def setUp(self):
-        self._verbose = FLAGS.verbose 
+        self._verbose = FLAGS.verbose
         FLAGS.verbose = self.LEVEL
         PygiosTestCase.setUp(self)
 
@@ -54,38 +54,38 @@ class PygiosZeroVerbosity(PygiosTestCase):
         PygiosTestCase.tearDown(self)
         FLAGS.verbose = self._verbose
 
-    LEVEL = 0 
+    LEVEL = 0
 
     def test_zero(self):
         self.assertIn('zero', self.stdout)
 
     def test_one(self):
         self.assertNotIn('one', self.stdout)
-        
+
     def test_two(self):
         self.assertNotIn('two', self.stdout)
-        
+
     def test_three(self):
         self.assertNotIn('three', self.stdout)
-        
+
 
 class PygiosOneVerbosity(PygiosZeroVerbosity):
-    LEVEL = 1 
+    LEVEL = 1
     def test_one(self):
         self.assertIn('one', self.stdout)
-        
-        
+
+
 class PygiosTwoVerbosity(PygiosOneVerbosity):
-    LEVEL = 2 
+    LEVEL = 2
     def test_two(self):
         self.assertIn('two', self.stdout)
 
+
 class PygiosThreeVerbosity(PygiosTwoVerbosity):
-    LEVEL = 3 
+    LEVEL = 3
     def test_three(self):
         self.assertIn('three', self.stdout)
-        
-        
+
 
 class PygiosEmptyTest(PygiosTestCase):
 
@@ -94,7 +94,7 @@ class PygiosEmptyTest(PygiosTestCase):
         pass
 
     def test_is_ok(self):
-        "confirm test result has string OK"        
+        "confirm test result has string OK"
         self.assertIn('OK', self.stdout)
 
     def test_is_not_warning(self):
@@ -115,7 +115,7 @@ class PygiosWarningTest(PygiosTestCase):
         warning()
 
     def test_is_not_ok(self):
-        "confirm test result has string OK"        
+        "confirm test result has string OK"
         self.assertNotIn('OK', self.stdout)
 
     def test_is_warning(self):
@@ -136,7 +136,7 @@ class PygiosCriticalTest(PygiosTestCase):
         critical()
 
     def test_is_notgood(self):
-        "confirm test result has string OK"        
+        "confirm test result has string OK"
         self.assertNotIn('OK', self.stdout)
 
     def test_is_not_warning(self):

@@ -39,19 +39,19 @@ def critical_threshold():
     return FLAGS.critical
 
 
-_code = 0 
+_code = 0
 _performance = []
 _output = []
-_verbosity = 0 
+_verbosity = 0
 
 def reset():
     global _code, _performance, _output, _verbosity
-    _code = 0 
+    _code = 0
     _performance = []
     _output = []
-    _verbosity = 0 
+    _verbosity = 0
 
-    
+
 def warning():
     global _code
     _code = max(_code, 1)
@@ -80,7 +80,7 @@ def code_name():
 
 def more():
     global _verbosity
-    _verbosity += 1 
+    _verbosity += 1
 
 
 def PygiosMain(args=sys.argv, work=None, name=None, stdout=sys.stdout, stderr=sys.stderr, exit=exit):
@@ -96,7 +96,7 @@ def PygiosMain(args=sys.argv, work=None, name=None, stdout=sys.stdout, stderr=sy
 
     try:
         for line in work() or []:
-            if line is None: continue 
+            if line is None: continue
             if _verbosity > FLAGS.verbose:
                 break
             if isinstance(line, P):
@@ -109,7 +109,7 @@ def PygiosMain(args=sys.argv, work=None, name=None, stdout=sys.stdout, stderr=sy
             _output.append('')
         if _performance:
             stdout.write("%s %s - %s | %s\n" % (
-                name, 
+                name,
                 code_name(),
                 _output[0],
                 _performance[0],
@@ -134,7 +134,7 @@ def PygiosMain(args=sys.argv, work=None, name=None, stdout=sys.stdout, stderr=sy
         stdout.write("%s UNKNOWN - %s" % (name, exception_printout.getvalue().replace('|', '\\|')))
         stdout.flush()
         return exit(3)
-    
+
 def check(v, msg):
     if v > FLAGS.critical:
         critical()
@@ -142,9 +142,9 @@ def check(v, msg):
         warning()
     if msg is not None:
         return msg % (v,)
-        
-    
-    
-  
-    
+
+
+
+
+
 __ALL__ = 'PygiosMain warning critical NagiosError error perf output more P check'.split()
