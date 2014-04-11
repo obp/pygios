@@ -11,6 +11,15 @@ DEFINE_string('region', 'us-east-1', 'The AWS region to connect.  SQS has sepera
 RegisterValidator('queue', lambda x:x is not None, 'You must provide a Queue name')
 
 
+# Just a note to new sysadmins: Nagios shouldn't do anything unless
+# the system requires manual intervention.  The difference between a
+# warning and a critical is whether or not the problem is customer
+# visible.  When setting these thresholds try to avoid the 70% rule
+# nagios recommends.  You should set these values to whatever
+# inidicates your system is broken in a way that you must fix
+# manually.  Warnings that you cannot act on just disrupt your
+# weekend.
+
 default_warning(5)
 default_critical(10)
 
