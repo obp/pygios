@@ -10,7 +10,7 @@ FLAGS = gflags.FLAGS
 
 gflags_multibool.DEFINE_multibool('verbose', 0, 'Verbosity leve', short_name='v')
 
-gflags_multibool.DEFINE_boolean('reverse', False, 'By default Nagios alerts if a value is over the threshold.  If set to true, alerts if the value is under the threshold.  This only applies if the warning and critical thresholds are the same, preventing pygios from figuring out which direction it should perform a comparison.')
+gflags.DEFINE_boolean('reverse', False, 'By default Nagios alerts if a value is over the threshold.  If set to true, alerts if the value is under the threshold.  This only applies if the warning and critical thresholds are the same, preventing pygios from figuring out which direction it should perform a comparison.')
 
 gflags.DEFINE_string('name', sys.argv[0], 'Set the name of this daemon as presented to nagios.  This parameter is optional and can be used to overwrite the name parameter provided to pygios_main')
 
@@ -137,7 +137,7 @@ def PygiosMain(args=sys.argv, work=None, name=None, stdout=sys.stdout, stderr=sy
         stdout.flush()
         return exit(3)
 
-def check(v, msg):
+def check(v, msg=None):
     if FLAGS.critical > FLAGS.warning:
         if v > FLAGS.critical:
             critical()
